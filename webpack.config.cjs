@@ -1,6 +1,6 @@
 const path = require('path');
 const { spawn } = require('child_process');
-const debug = require('debug')('webpack');
+// const debug = require('debug')('webpack');
 
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
@@ -69,7 +69,7 @@ module.exports = () => {
         config.plugins.push(new CleanWebpackPlugin());
     } else {
         let child;
-        let launched = false;
+        // let launched = false;
 
         config.plugins.push({
             apply: (compiler) => {
@@ -78,7 +78,7 @@ module.exports = () => {
                     (compilation) => {
                         // console.log('__watchRun');
                         if (child) {
-                            debug('server reloading...');
+                            // debug('server reloading...');
                             child.kill();
                             child = undefined;
                         }
@@ -89,6 +89,14 @@ module.exports = () => {
                     (compilation) => {
                         // console.log('__afterEmit');
                         if (child) return;
+
+                        // debug(
+                        //     launched ? 'server started!' : 'server reloaded!'
+                        // );
+                        // launched = true;
+
+                        // console.log('\n\n');
+
                         child = spawn(
                             'node',
                             [path.resolve(dist, 'main.cjs')],
@@ -101,11 +109,6 @@ module.exports = () => {
                                 `child process exited with code ${code}`
                             );
                         });
-
-                        debug(
-                            launched ? 'server started!' : 'server reloaded!'
-                        );
-                        launched = true;
                     }
                 );
             },

@@ -74,6 +74,7 @@ export let app: Koa;
     ])
         .run()
         .catch((err) => {
+            console.log('\n');
             console.error(err);
         });
 })();
