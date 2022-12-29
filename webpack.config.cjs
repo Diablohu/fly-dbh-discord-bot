@@ -21,7 +21,10 @@ module.exports = () => {
         },
         plugins: [],
         entry: {
-            main: [path.resolve(__dirname, 'src/main.ts')],
+            main: [
+                path.resolve(__dirname, 'src/polyfill.cjs'),
+                path.resolve(__dirname, 'src/main.ts'),
+            ],
         },
         module: {
             rules: [
@@ -41,16 +44,16 @@ module.exports = () => {
         },
         resolve: {
             modules: ['__modules', 'node_modules'],
-            extensions: ['.js', '.ts', '.mjs', '.cjs'],
+            extensions: ['.js', '.ts', '.mjs', '.cjs', '.json'],
         },
         stats: {
             preset: 'minimal',
             // copied from `'minimal'`
             all: false,
-            modules: true,
+            modules: false,
             // maxModules: 0,
             errors: true,
-            warnings: true,
+            warnings: false,
             // our additional options
             moduleTrace: true,
             errorDetails: true,
