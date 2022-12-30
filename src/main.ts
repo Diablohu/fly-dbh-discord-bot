@@ -65,6 +65,7 @@ export let client: Client;
                         author,
                         content,
                         attachments,
+                        embeds,
                         type,
                         system,
                         ...message
@@ -78,6 +79,7 @@ export let client: Client;
                             content,
                             type,
                             system,
+                            embeds,
                         });
                         for (const [
                             id,
