@@ -11,3 +11,8 @@
 | ----------------- | ----------------- |
 | DISCORD_TOKEN     | Discord bot token |
 | KOOK_BOT_API_BASE | Koot bot API Base |
+
+## 当前能力
+
+-   ✅ 以 BOT 身份登入 Discord
+-   ✅ 监视目标服务器新消息
