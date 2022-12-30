@@ -1,7 +1,7 @@
 import fs from 'fs-extra';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import Koa from 'koa';
+// import Koa from 'koa';
 import * as dotenv from 'dotenv';
 import Listr from 'listr';
 import { Client, Events, GatewayIntentBits } from 'discord.js';
@@ -9,12 +9,13 @@ import { Client, Events, GatewayIntentBits } from 'discord.js';
 // ============================================================================
 
 dotenv.config();
-const { DISCORD_TOKEN: token } = process.env;
+const { DISCORD_TOKEN, KOOK_BOT_API_BASE } = process.env;
+const monitorChannels = [];
 
 // ============================================================================
 
 export let client: Client;
-export let app: Koa;
+// export let app: Koa;
 
 // ============================================================================
 
@@ -68,6 +69,8 @@ export let app: Koa;
                         system,
                         ...message
                     }) => {
+                        if (system) return;
+                        if (type !== 0) return;
                         // Message Types https://discord-api-types.dev/api/discord-api-types-v10/enum/MessageType
                         console.log({
                             createdTimestamp,
@@ -84,6 +87,10 @@ export let app: Koa;
                         }
                     }
                 );
+
+                client.on(Events.MessageUpdate, (oldMessage, newMessage) => {
+                    //
+                });
                 // client.on(Events.Debug, (...args) => {
                 //     console.log(...args);
                 // });
@@ -91,23 +98,23 @@ export let app: Koa;
         },
         {
             title: 'Logging into Discord',
-            task: () => client.login(token),
+            task: () => client.login(DISCORD_TOKEN),
         },
-        {
-            title: 'Starting Koa server',
-            task: () =>
-                new Promise((resolve) => {
-                    app = new Koa();
+        // {
+        //     title: 'Starting Koa server for Koot bot',
+        //     task: () =>
+        //         new Promise((resolve) => {
+        //             app = new Koa();
 
-                    app.use(async (ctx) => {
-                        ctx.body = 'Hello World';
-                    });
+        //             app.use(async (ctx) => {
+        //                 ctx.body = 'Hello World';
+        //             });
 
-                    app.listen(3000, async function () {
-                        resolve(3000);
-                    });
-                }),
-        },
+        //             app.listen(3000, async function () {
+        //                 resolve(3000);
+        //             });
+        //         }),
+        // },
     ])
         .run()
         .catch((err) => {

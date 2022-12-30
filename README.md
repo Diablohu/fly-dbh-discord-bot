@@ -7,6 +7,7 @@
 
 **使用的环境变量**
 
-| 变量名        | 值                |
-| ------------- | ----------------- |
-| DISCORD_TOKEN | Discord bot token |
+| 变量名            | 值                |
+| ----------------- | ----------------- |
+| DISCORD_TOKEN     | Discord bot token |
+| KOOK_BOT_API_BASE | Koot bot API Base |
