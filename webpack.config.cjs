@@ -104,11 +104,11 @@ module.exports = () => {
                                 stdio: 'inherit',
                             }
                         );
-                        child.on('close', (code) => {
-                            console.log(
-                                `child process exited with code ${code}`
-                            );
-                        });
+                        // child.on('close', (code) => {
+                        //     console.log(
+                        //         `child process exited with code ${code}`
+                        //     );
+                        // });
                     }
                 );
             },

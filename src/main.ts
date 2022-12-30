@@ -31,6 +31,11 @@ export let app: Koa;
         if (!fs.existsSync(rootEnvFile)) throw new Error('.env file missing');
     }
 
+    // 注册结束进程
+    process.on('exit', () => {
+        client?.destroy();
+    });
+
     // 开始流程
     new Listr([
         {
@@ -40,6 +45,7 @@ export let app: Koa;
                     intents: [
                         GatewayIntentBits.Guilds,
                         GatewayIntentBits.MessageContent,
+                        GatewayIntentBits.GuildMessages,
                     ],
                 });
 
@@ -50,6 +56,37 @@ export let app: Koa;
                 });
 
                 client.on(Events.Error, (e) => console.trace(e));
+
+                client.on(
+                    Events.MessageCreate,
+                    ({
+                        createdTimestamp,
+                        author,
+                        content,
+                        attachments,
+                        type,
+                        system,
+                        ...message
+                    }) => {
+                        // Message Types https://discord-api-types.dev/api/discord-api-types-v10/enum/MessageType
+                        console.log({
+                            createdTimestamp,
+                            author,
+                            content,
+                            type,
+                            system,
+                        });
+                        for (const [
+                            id,
+                            { url, contentType, ...attachment },
+                        ] of attachments) {
+                            console.log({ id, url, contentType });
+                        }
+                    }
+                );
+                // client.on(Events.Debug, (...args) => {
+                //     console.log(...args);
+                // });
             },
         },
         {
