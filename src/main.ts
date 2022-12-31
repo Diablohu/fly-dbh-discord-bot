@@ -5,12 +5,26 @@ import { fileURLToPath } from 'url';
 import * as dotenv from 'dotenv';
 import Listr from 'listr';
 import { Client, Events, GatewayIntentBits } from 'discord.js';
+import axios from 'axios';
 
 // ============================================================================
 
 dotenv.config();
+const monitorChannels = [
+    '1057919252922892298', // bot channel
+
+    // '983629937451892766', // fs news channel 1
+    // '1058110232972247103', // fs news channel 2
+];
+
+if (!process.env.DISCORD_TOKEN) {
+    process.env.DISCORD_TOKEN =
+        !!process.env.DISCORD_TOKEN_FILE &&
+        fs.existsSync(process.env.DISCORD_TOKEN_FILE)
+            ? fs.readFileSync(process.env.DISCORD_TOKEN_FILE, 'utf-8')
+            : '';
+}
 const { DISCORD_TOKEN, KOOK_BOT_API_BASE } = process.env;
-const monitorChannels = [];
 
 // ============================================================================
 
@@ -61,6 +75,7 @@ export let client: Client;
                 client.on(
                     Events.MessageCreate,
                     ({
+                        channelId,
                         createdTimestamp,
                         author,
                         content,
@@ -72,6 +87,7 @@ export let client: Client;
                     }) => {
                         if (system) return;
                         if (type !== 0) return;
+                        if (!monitorChannels.includes(channelId)) return;
                         // Message Types https://discord-api-types.dev/api/discord-api-types-v10/enum/MessageType
                         console.log({
                             createdTimestamp,
@@ -81,12 +97,28 @@ export let client: Client;
                             system,
                             embeds,
                         });
-                        for (const [
-                            id,
-                            { url, contentType, ...attachment },
-                        ] of attachments) {
-                            console.log({ id, url, contentType });
-                        }
+                        // for (const [
+                        //     id,
+                        //     { url, contentType, ...attachment },
+                        // ] of attachments) {
+                        //     console.log({ id, url, contentType });
+                        // }
+                        axios.post(`${KOOK_BOT_API_BASE}/sync-discord-bot`, {
+                            userid: author.id,
+                            username: author.username,
+                            useravatar: author.avatar,
+                            createAt: createdTimestamp,
+                            body: content,
+                            attachments: [...attachments].map(
+                                ([
+                                    id,
+                                    { url, contentType, ...attachment },
+                                ]) => ({
+                                    url,
+                                    type: contentType,
+                                })
+                            ),
+                        });
                     }
                 );
 
