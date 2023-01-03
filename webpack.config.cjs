@@ -99,16 +99,16 @@ module.exports = () => {
 
                         child = spawn(
                             'node',
-                            [path.resolve(dist, 'main.cjs')],
+                            ['--inspect', path.resolve(dist, 'main.cjs')],
                             {
                                 stdio: 'inherit',
                             }
                         );
-                        // child.on('close', (code) => {
-                        //     console.log(
-                        //         `child process exited with code ${code}`
-                        //     );
-                        // });
+                        child.on('close', (code) => {
+                            console.log(
+                                `child process exited with code ${code}`
+                            );
+                        });
                     }
                 );
             },
