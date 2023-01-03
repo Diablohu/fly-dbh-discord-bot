@@ -20,6 +20,8 @@ const channelsToKook = {
 
     '983629937451892766': '3058739835272946', // fs news channel 1
     '1058110232972247103': '3058739835272946', // fs news channel 2
+
+    '1059769292717039626': '5037270702167031', // imas news channel
 };
 const logger = winston.createLogger({
     level: 'info',
