@@ -1,0 +1,11 @@
+{
+    "apps": [
+        {
+            "name": "fly-dbh-discord-bot",
+            "script": "main.cjs",
+            "max_memory_restart": "250M",
+            "out_file": "/.logs/server.log",
+            "error_file": "/.logs/server-error.log"
+        }
+    ]
+}
