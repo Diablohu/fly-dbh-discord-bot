@@ -88,8 +88,8 @@ async function publish() {
                             `git clone ${git} ${md5git} --depth 1` +
                                 (!branch ? '' : ` --branch ${branch}`),
                             {
-                                // stdio: 'ignore',
-                                stdio: 'inherit',
+                                stdio: 'ignore',
+                                // stdio: 'inherit',
                                 cwd: parentDirectory,
                             }
                         ).catch((err) => {
