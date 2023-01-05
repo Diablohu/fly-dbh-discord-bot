@@ -109278,25 +109278,35 @@ function getPostDataFromMessage(msg, eventType) {
       ...message
     }
   });
+
+  // return {
+  //     channelId:
+  //         channelsToKook[channelId as keyof typeof channelsToKook] ||
+  //         6086801551312186,
+  //     msgId: id,
+  //     userId: author.id,
+  //     userName: author.username,
+  //     userAvatar: `https://cdn.discordapp.com/avatars/${author.id}/${author.avatar}.webp`,
+  //     userAvatarId: author.avatar,
+  //     createAt: createdTimestamp,
+  //     body: content,
+  //     attachments: [...attachments].map(
+  //         ([id, { url, contentType, ...attachment }]) => ({
+  //             url,
+  //             type: contentType,
+  //         })
+  //     ),
+  //     embeds,
+  //     source: 'discord',
+  // };
   return {
-    channelId: channelsToKook[channelId] || 6086801551312186,
-    msgId: id,
-    userId: author.id,
-    userName: author.username,
-    userAvatar: `https://cdn.discordapp.com/avatars/${author.id}/${author.avatar}.webp`,
-    userAvatarId: author.avatar,
-    createAt: createdTimestamp,
-    body: content,
-    attachments: [...attachments].map(([id, {
-      url,
-      contentType,
-      ...attachment
-    }]) => ({
-      url,
-      type: contentType
-    })),
-    embeds,
-    source: 'discord'
+    ...msg,
+    author: {
+      id: author.id,
+      username: author.username,
+      avatar: author.avatar
+    },
+    attachments: [...attachments]
   };
 }
 async function createClient() {
@@ -109317,7 +109327,7 @@ async function createClient() {
     if (message.system) return;
     if (message.type !== 0) return;
     if (!(`${message.channelId}` in channelsToKook)) return;
-    await axios__WEBPACK_IMPORTED_MODULE_8__["default"].post(`${KOOK_BOT_API_BASE}/sync-discord-bot`, getPostDataFromMessage(message, discord_js__WEBPACK_IMPORTED_MODULE_4__.Events.MessageCreate));
+    await axios__WEBPACK_IMPORTED_MODULE_8__["default"].post(`${KOOK_BOT_API_BASE}/sync-discord-message`, getPostDataFromMessage(message, discord_js__WEBPACK_IMPORTED_MODULE_4__.Events.MessageCreate));
 
     // console.log(res);
   });
@@ -109327,7 +109337,7 @@ async function createClient() {
     if (newMessage.type !== 0) return;
     if (!(`${newMessage.channelId}` in channelsToKook)) return;
     // console.log('MessageUpdate', oldMessage, newMessage);
-    await axios__WEBPACK_IMPORTED_MODULE_8__["default"].post(`${KOOK_BOT_API_BASE}/sync-discord-bot`, getPostDataFromMessage(newMessage, discord_js__WEBPACK_IMPORTED_MODULE_4__.Events.MessageUpdate));
+    await axios__WEBPACK_IMPORTED_MODULE_8__["default"].post(`${KOOK_BOT_API_BASE}/sync-discord-message`, getPostDataFromMessage(newMessage, discord_js__WEBPACK_IMPORTED_MODULE_4__.Events.MessageUpdate));
 
     // console.log(res);
   });
