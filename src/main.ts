@@ -91,25 +91,34 @@ function getPostDataFromMessage(msg: Message, eventType: keyof ClientEvents) {
         },
     });
 
+    // return {
+    //     channelId:
+    //         channelsToKook[channelId as keyof typeof channelsToKook] ||
+    //         6086801551312186,
+    //     msgId: id,
+    //     userId: author.id,
+    //     userName: author.username,
+    //     userAvatar: `https://cdn.discordapp.com/avatars/${author.id}/${author.avatar}.webp`,
+    //     userAvatarId: author.avatar,
+    //     createAt: createdTimestamp,
+    //     body: content,
+    //     attachments: [...attachments].map(
+    //         ([id, { url, contentType, ...attachment }]) => ({
+    //             url,
+    //             type: contentType,
+    //         })
+    //     ),
+    //     embeds,
+    //     source: 'discord',
+    // };
     return {
-        channelId:
-            channelsToKook[channelId as keyof typeof channelsToKook] ||
-            6086801551312186,
-        msgId: id,
-        userId: author.id,
-        userName: author.username,
-        userAvatar: `https://cdn.discordapp.com/avatars/${author.id}/${author.avatar}.webp`,
-        userAvatarId: author.avatar,
-        createAt: createdTimestamp,
-        body: content,
-        attachments: [...attachments].map(
-            ([id, { url, contentType, ...attachment }]) => ({
-                url,
-                type: contentType,
-            })
-        ),
-        embeds,
-        source: 'discord',
+        ...msg,
+        author: {
+            id: author.id,
+            username: author.username,
+            avatar: author.avatar,
+        },
+        attachments: [...attachments],
     };
 }
 
@@ -139,7 +148,7 @@ async function createClient(): Promise<void> {
         if (!(`${message.channelId}` in channelsToKook)) return;
 
         await axios.post(
-            `${KOOK_BOT_API_BASE}/sync-discord-bot`,
+            `${KOOK_BOT_API_BASE}/sync-discord-message`,
             getPostDataFromMessage(message, Events.MessageCreate)
         );
 
@@ -152,7 +161,7 @@ async function createClient(): Promise<void> {
         if (!(`${newMessage.channelId}` in channelsToKook)) return;
         // console.log('MessageUpdate', oldMessage, newMessage);
         await axios.post(
-            `${KOOK_BOT_API_BASE}/sync-discord-bot`,
+            `${KOOK_BOT_API_BASE}/sync-discord-message`,
             getPostDataFromMessage(newMessage as Message, Events.MessageUpdate)
         );
 
