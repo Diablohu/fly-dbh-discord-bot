@@ -15,15 +15,20 @@ import { logDir } from '../app.config';
 // ============================================================================
 
 dotenv.config();
-const channelsToKook = {
-    '1057919252922892298': '6086801551312186', // bot channel
+const channelsWatch: string[] = [
+    '1057919252922892298', // bot channel
 
-    '983629937451892766': '3058739835272946', // fs news channel 1
-    '1058110232972247103': '3058739835272946', // fs news channel 2
-    '1060032674988826664': '6218098845719397', // fs news manual sync
+    '983629937451892766', // fs news channel 1
+    '1058110232972247103', // fs news channel 2
+    '1060032674988826664', // fs news manual sync
 
-    '1059769292717039626': '5037270702167031', // imas news channel
-};
+    '1061038884143763538', // fs group
+
+    '1059769292717039626', // imas news channel
+];
+if (process.env.WEBPACK_BUILD_ENV === 'dev') {
+    channelsWatch.push('1061924579100078090');
+}
 const logger = winston.createLogger({
     level: 'info',
     format: winston.format.combine(
@@ -145,7 +150,7 @@ async function createClient(): Promise<void> {
     client.on(Events.MessageCreate, async (message) => {
         if (message.system) return;
         if (message.type !== 0) return;
-        if (!(`${message.channelId}` in channelsToKook)) return;
+        if (!channelsWatch.includes(`${message.channelId}`)) return;
 
         await axios.post(
             `${KOOK_BOT_API_BASE}/sync-discord-message`,
@@ -158,7 +163,7 @@ async function createClient(): Promise<void> {
     client.on(Events.MessageUpdate, async (oldMessage, newMessage) => {
         if (newMessage.system) return;
         if (newMessage.type !== 0) return;
-        if (!(`${newMessage.channelId}` in channelsToKook)) return;
+        if (!channelsWatch.includes(`${newMessage.channelId}`)) return;
         // console.log('MessageUpdate', oldMessage, newMessage);
         await axios.post(
             `${KOOK_BOT_API_BASE}/sync-discord-message`,
