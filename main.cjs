@@ -109204,20 +109204,25 @@ __webpack_require__.r(__webpack_exports__);
 // ============================================================================
 
 dotenv__WEBPACK_IMPORTED_MODULE_2__.config();
-const channelsToKook = {
-  '1057919252922892298': '6086801551312186',
-  // bot channel
+const channelsWatch = ['1057919252922892298',
+// bot channel
 
-  '983629937451892766': '3058739835272946',
-  // fs news channel 1
-  '1058110232972247103': '3058739835272946',
-  // fs news channel 2
-  '1060032674988826664': '6218098845719397',
-  // fs news manual sync
+'983629937451892766',
+// fs news channel 1
+'1058110232972247103',
+// fs news channel 2
+'1060032674988826664',
+// fs news manual sync
 
-  '1059769292717039626': '5037270702167031' // imas news channel
-};
+'1061038884143763538',
+// fs group
 
+'1059769292717039626' // imas news channel
+];
+
+if (process.env.WEBPACK_BUILD_ENV === 'dev') {
+  channelsWatch.push('1061924579100078090');
+}
 const logger = winston__WEBPACK_IMPORTED_MODULE_5___default().createLogger({
   level: 'info',
   format: winston__WEBPACK_IMPORTED_MODULE_5___default().format.combine(
@@ -109326,7 +109331,7 @@ async function createClient() {
   client.on(discord_js__WEBPACK_IMPORTED_MODULE_4__.Events.MessageCreate, async message => {
     if (message.system) return;
     if (message.type !== 0) return;
-    if (!(`${message.channelId}` in channelsToKook)) return;
+    if (!channelsWatch.includes(`${message.channelId}`)) return;
     await axios__WEBPACK_IMPORTED_MODULE_8__["default"].post(`${KOOK_BOT_API_BASE}/sync-discord-message`, getPostDataFromMessage(message, discord_js__WEBPACK_IMPORTED_MODULE_4__.Events.MessageCreate));
 
     // console.log(res);
@@ -109335,7 +109340,7 @@ async function createClient() {
   client.on(discord_js__WEBPACK_IMPORTED_MODULE_4__.Events.MessageUpdate, async (oldMessage, newMessage) => {
     if (newMessage.system) return;
     if (newMessage.type !== 0) return;
-    if (!(`${newMessage.channelId}` in channelsToKook)) return;
+    if (!channelsWatch.includes(`${newMessage.channelId}`)) return;
     // console.log('MessageUpdate', oldMessage, newMessage);
     await axios__WEBPACK_IMPORTED_MODULE_8__["default"].post(`${KOOK_BOT_API_BASE}/sync-discord-message`, getPostDataFromMessage(newMessage, discord_js__WEBPACK_IMPORTED_MODULE_4__.Events.MessageUpdate));
 
