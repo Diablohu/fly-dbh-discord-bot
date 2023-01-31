@@ -18,13 +18,15 @@ dotenv.config();
 const channelsWatch: string[] = [
     '1057919252922892298', // bot channel
 
+    // MSFS
     '983629937451892766', // fs news channel 1
     '1058110232972247103', // fs news channel 2
     '1060032674988826664', // fs news manual sync
-
     '1061038884143763538', // fs group
 
+    // Other Games
     '1059769292717039626', // imas news channel
+    '1069820588538986536', // kancolle news channel
 ];
 if (process.env.WEBPACK_BUILD_ENV === 'dev') {
     channelsWatch.push('1061924579100078090');
