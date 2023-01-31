@@ -106217,7 +106217,7 @@ class AxiosHeaders {
     return this;
   }
 }
-AxiosHeaders.accessor(['Content-Type', 'Content-Length', 'Accept', 'Accept-Encoding', 'User-Agent']);
+AxiosHeaders.accessor(['Content-Type', 'Content-Length', 'Accept', 'Accept-Encoding', 'User-Agent', 'Authorization']);
 _utils_js__WEBPACK_IMPORTED_MODULE_0__["default"].freezeMethods(AxiosHeaders.prototype);
 _utils_js__WEBPACK_IMPORTED_MODULE_0__["default"].freezeMethods(AxiosHeaders);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (AxiosHeaders);
@@ -106823,7 +106823,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "VERSION": () => (/* binding */ VERSION)
 /* harmony export */ });
-const VERSION = "1.2.2";
+const VERSION = "1.2.6";
 
 /***/ }),
 
@@ -109207,17 +109207,20 @@ dotenv__WEBPACK_IMPORTED_MODULE_2__.config();
 const channelsWatch = ['1057919252922892298',
 // bot channel
 
+// MSFS
 '983629937451892766',
 // fs news channel 1
 '1058110232972247103',
 // fs news channel 2
 '1060032674988826664',
 // fs news manual sync
-
 '1061038884143763538',
 // fs group
 
-'1059769292717039626' // imas news channel
+// Other Games
+'1059769292717039626',
+// imas news channel
+'1069820588538986536' // kancolle news channel
 ];
 
 if (process.env.WEBPACK_BUILD_ENV === 'dev') {
