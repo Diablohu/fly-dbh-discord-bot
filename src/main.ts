@@ -21,6 +21,7 @@ const channelsWatch: string[] = [
     // MSFS
     '983629937451892766', // fs news channel 1
     '1058110232972247103', // fs news channel 2
+    '1097849730731626578', // fs news channel 3
     '1060032674988826664', // fs news manual sync
     '1061038884143763538', // fs group
 
