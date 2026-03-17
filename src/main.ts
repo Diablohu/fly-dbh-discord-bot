@@ -9,12 +9,14 @@ import Listr from 'listr';
 import { Client, Events, GatewayIntentBits } from 'discord.js';
 import axios from 'axios';
 import winston from 'winston';
+import 'winston-daily-rotate-file';
 
 import { logDir, channelsSyncToKook } from '../app.config';
 
 // ============================================================================
 
 dotenv.config();
+
 const logger = winston.createLogger({
     level: 'info',
     format: winston.format.combine(
@@ -23,19 +25,20 @@ const logger = winston.createLogger({
         winston.format.prettyPrint()
     ),
     defaultMeta: { service: 'fly-dbh-discord-bot' },
-    transports: [
-        new winston.transports.File({
-            filename: path.resolve(logDir, 'error.log'),
-            level: 'error',
-        }),
-        new winston.transports.File({
-            filename: path.resolve(logDir, 'info.log'),
-            level: 'info',
-        }),
-        new winston.transports.File({
-            filename: path.resolve(logDir, 'combined.log'),
-        }),
-    ],
+    transports: ['error', 'warn', 'notice', 'info', 'http', undefined].map(
+        (level) =>
+            new winston.transports.DailyRotateFile({
+                level,
+                filename: path.resolve(
+                    logDir,
+                    `%DATE%.${level || 'combined'}.log`
+                ),
+                datePattern: 'YYYY-MM-DD',
+                zippedArchive: true,
+                maxFiles: '7d',
+                utc: true,
+            })
+    ),
 });
 
 if (!process.env.DISCORD_TOKEN) {
